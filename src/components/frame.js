@@ -467,7 +467,7 @@ function Frame({
                 One More Try does not collect ANY data. It works entirely in
                 your browser, which means it works offline too! It's also open
                 source so you can{" "}
-                <a href="www.google.com" target="_blank">
+                <a href="https://github.com/tomlum/OneMoreTry" target="_blank">
                   see for yourself!
                 </a>
               </Footnote>
