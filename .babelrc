@@ -1,0 +1,11 @@
+{
+  "env": {
+    "test": {
+      "presets": [["preact-cli/babel", { "modules": "commonjs" }]],
+      "plugins": ["babel-plugin-styled-components"]
+    },
+    "development": {
+      "plugins": ["babel-plugin-styled-components"]
+    }
+  }
+}

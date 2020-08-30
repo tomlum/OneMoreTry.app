@@ -1,0 +1,21 @@
+{
+  "name": "One More Try!",
+  "short_name": "One More Try!",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#3a3f4d",
+  "theme_color": "#f38322",
+  "icons": [
+    {
+      "src": "/assets/icons/android-chrome-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/assets/icons/android-chrome-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

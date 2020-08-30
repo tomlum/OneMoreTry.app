@@ -1,0 +1,61 @@
+@import url("https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap");
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background: #3a3f4d;
+  font-family: "Helvetica Neue", arial, sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 17px;
+  user-select: none;
+  min-width: 800px;
+}
+
+div {
+  color: white;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.center {
+  text-align: center;
+}
+
+#app {
+  height: 100%;
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-start {
+  justify-content: flex-end;
+}
+
+.flex1 {
+  flex: 1;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.mt5 {
+  margin-top: 5px;
+}
