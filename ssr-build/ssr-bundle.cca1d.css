@@ -1,4 +1,9 @@
 @import url(https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap);
+video.holdControls::-webkit-media-controls-panel {
+  display: flex !important;
+  opacity: 1 !important;
+}
+
 html,
 body {
   height: 100%;
@@ -59,6 +64,11 @@ div {
       align-items: center;
 }
 
+.align-start {
+  -ms-flex-align: start !important;
+      align-items: flex-start !important;
+}
+
 .absolute {
   position: absolute;
 }
@@ -68,4 +78,4 @@ div {
 }
 
 
-/*# sourceMappingURL=ssr-bundle.8a88e.css.map*/
+/*# sourceMappingURL=ssr-bundle.cca1d.css.map*/
