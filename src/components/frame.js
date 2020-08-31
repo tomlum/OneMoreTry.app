@@ -160,6 +160,7 @@ function Frame({
   setCameraReady,
   preview,
   setPreview,
+  downloadButtonRef,
 }) {
   const [mode, setMode] = useState(null);
   const infoBoxRef = useRef(null);
@@ -194,6 +195,17 @@ function Frame({
       recorder.current.ondataavailable = null;
       recorder.current.stop();
     }
+  };
+
+  const setPreviewVideo = (data) => {
+    const blob = new Blob([data], { type: "video/webm" });
+    replayBlobURL.current = URL.createObjectURL(blob);
+    downloadButtonRef.current.href = replayBlobURL.current;
+    const date = new Date();
+    downloadButtonRef.current.download = `${date.getFullYear()}-${
+      date.getMonth() + 1
+    }-${date.getDate()}__${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}.webm`;
+    replayScreenRef.current.src = replayBlobURL.current;
   };
 
   useEffect(() => {
@@ -290,34 +302,38 @@ function Frame({
         replayRecorder1.current = new MediaRecorder(
           previewScreenRef.current.captureStream
             ? previewScreenRef.current.captureStream({
-                mimeType: "video/webm; codecs=vp9",
+                mimeType: "video/webm",
               })
             : previewScreenRef.current.mozCaptureStream({
-                mimeType: "video/webm; codecs=vp9",
-              })
+                mimeType: "video/webm",
+              }),
+          {
+            mimeType: "video/webm",
+          }
         );
         replayRecorder2.current = new MediaRecorder(
           previewScreenRef.current.captureStream
             ? previewScreenRef.current.captureStream({
-                mimeType: "video/webm; codecs=vp9",
+                mimeType: "video/webm",
               })
             : previewScreenRef.current.mozCaptureStream({
-                mimeType: "video/webm; codecs=vp9",
-              })
+                mimeType: "video/webm",
+              }),
+          {
+            mimeType: "video/webm",
+          }
         );
         replayRecorder1.current.ondataavailable = (event) => {
           longerReplayRecorder.current = 2;
           if (finalReplay.current) {
-            replayBlobURL.current = URL.createObjectURL(event.data);
-            replayScreenRef.current.src = replayBlobURL.current;
+            setPreviewVideo(event.data);
           }
           finalReplay.current = false;
         };
         replayRecorder2.current.ondataavailable = (event) => {
           longerReplayRecorder.current = 1;
           if (finalReplay.current) {
-            replayBlobURL.current = URL.createObjectURL(event.data);
-            replayScreenRef.current.src = replayBlobURL.current;
+            setPreviewVideo(event.data);
           }
           finalReplay.current = false;
         };
@@ -462,7 +478,7 @@ function Frame({
             ></video>
             <Description>
               <div>
-                One More Try uses a <b>Lag Camera</b> that lets you
+                One More Try uses a <b>Delay Camera</b> that lets you
                 <br />
                 <b>try something</b> and then <b>see it play back right away</b>
               </div>
@@ -489,12 +505,12 @@ function Frame({
 
       {preview && (
         <PreviewText>
-          <b>No Lag</b>
+          <b>No Delay</b>
         </PreviewText>
       )}
       {showLoading && (
         <LoadingBox>
-          <h3>Get Started! Your Lag Camera is just catching up!</h3>
+          <h3>Get Started! Your Delay Camera is just catching up!</h3>
           <LoadingSpinner time={ghostDelay}>Loading</LoadingSpinner>
         </LoadingBox>
       )}

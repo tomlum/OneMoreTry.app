@@ -57,6 +57,10 @@ div {
   align-items: center;
 }
 
+.align-start {
+  align-items: flex-start !important;
+}
+
 .absolute {
   position: absolute;
 }

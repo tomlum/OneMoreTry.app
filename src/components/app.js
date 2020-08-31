@@ -23,7 +23,7 @@ const LeftCol = styled.div`
 const MiddleCol = styled.div`
   display: flex;
   min-width: 150px;
-  width: 150px;
+  width: 185px;
   align-items: flex-start;
 `;
 
@@ -51,6 +51,14 @@ const PreviewButton = styled(Button)`
       opacity: 0.3;
     }
   }
+`;
+
+const DownloadButton = styled(Button)`
+  width: 40px;
+  img {
+    width: 60%;
+  }
+  margin-left: 10px;
 `;
 
 const Hint = styled.div`
@@ -97,12 +105,14 @@ export default function App() {
   const [replay, setReplay] = useState(false);
   const [replayReady, setReplayReady] = useState(false);
   const replayReadyRef = useRef(false);
-  const [replayDelayInput, setReplayDelayInput] = useState(2);
+  const [replayDelayInput, setReplayDelayInput] = useState(4);
   const [replayDelay, setReplayDelay] = useState(replayDelayInput);
   const [replaySpeed, setReplaySpeed] = useState(100);
 
-  const [ghostDelayInput, setGhostDelayInput] = useState(2);
+  const [ghostDelayInput, setGhostDelayInput] = useState(4);
   const [ghostDelay, setGhostDelay] = useState(ghostDelayInput);
+
+  const downloadButtonRef = useRef(false);
 
   const appRef = useRef(null);
 
@@ -173,13 +183,14 @@ export default function App() {
           setCameraReady={setCameraReady}
           preview={preview}
           setPreview={setPreview}
+          downloadButtonRef={downloadButtonRef}
         />
       </Row>
       <div className="flex mt5">
         <LeftCol>
           <Col>
             <InputGroup>
-              <b>Camera Lag</b>
+              <b>Camera Delay</b>
               <Input
                 disabled={start}
                 value={ghostDelayInput}
@@ -210,7 +221,7 @@ export default function App() {
         </LeftCol>
 
         <MiddleCol className="justify-end">
-          <span title="Preview without Lag">
+          <span title="Preview without Delay">
             <PreviewButton
               disabled={!start}
               onClick={() => {
@@ -252,10 +263,18 @@ export default function App() {
         </MiddleCol>
         <MiddleCol>
           {replay ? (
-            <ReplaySpeedSlider
-              replaySpeed={replaySpeed}
-              setReplaySpeed={setReplaySpeed}
-            />
+            <Row className="align-start">
+              <ReplaySpeedSlider
+                replaySpeed={replaySpeed}
+                setReplaySpeed={setReplaySpeed}
+              />
+
+              <a ref={downloadButtonRef}>
+                <DownloadButton>
+                  <img src="https://s3.us-east-2.amazonaws.com/tomlum/omt-download.png"></img>
+                </DownloadButton>
+              </a>
+            </Row>
           ) : (
             <Col>
               <ReplayButtonContainer>
