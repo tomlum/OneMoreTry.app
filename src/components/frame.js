@@ -34,6 +34,7 @@ const screenHeight = `calc(100vh - 120px)`;
 const screenMinHeight = `500px`;
 const screenMinWidth = `0px`;
 const PreviewScreen = styled.video`
+  position: relative;
   z-index: 0;
   left: 0;
   right: 0;
@@ -41,6 +42,14 @@ const PreviewScreen = styled.video`
   min-height: ${screenMinHeight};
   min-width: ${screenMinWidth};
   margin: auto;
+`;
+const PreviewText = styled.div`
+  z-index: 10;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 20px;
+  text-shadow: -2px 2px black;
 `;
 
 const Screen = styled.video`
@@ -82,6 +91,7 @@ const InfoBox = styled.div`
   opacity: 1;
   transition: opacity 0.4s;
   overflow: hidden;
+  width: 100%;
 
   .content {
     height: 100%;
@@ -345,7 +355,7 @@ function Frame({
     if (mode === "STREAM") {
       previewScreenRef.current.style.opacity = 1;
       setReplayReady(true);
-    } else {
+    } else if (!preview) {
       previewScreenRef.current.style.opacity = 0.5;
     }
 
@@ -448,7 +458,7 @@ function Frame({
               autoplay
               muted
               loop
-              src="https://s3.us-east-2.amazonaws.com/tomlum/omtloop.mp4"
+              // src="https://s3.us-east-2.amazonaws.com/tomlum/omtloop.mp4"
             ></video>
             <Description>
               <div>
@@ -475,9 +485,13 @@ function Frame({
           </Col>
         </InfoBox>
       </OverlayBox>
-      <PreviewScreen ref={previewScreenRef} autoplay playsinline muted>
-        Video Error, sorry!
-      </PreviewScreen>
+      <PreviewScreen ref={previewScreenRef} autoplay playsinline muted />
+
+      {preview && (
+        <PreviewText>
+          <b>No Lag</b>
+        </PreviewText>
+      )}
       {showLoading && (
         <LoadingBox>
           <h3>Get Started! Your Lag Camera is just catching up!</h3>
@@ -486,7 +500,14 @@ function Frame({
       )}
       <Screen ref={screen1Ref} autoplay playsinline muted></Screen>
       <Screen ref={screen2Ref} autoplay playsinline muted></Screen>
-      <Screen ref={replayScreenRef} autoplay playsinline controls loop></Screen>
+      <Screen
+        className="holdControls"
+        ref={replayScreenRef}
+        autoplay
+        playsinline
+        controls
+        loop
+      ></Screen>
     </Container>
   );
 }

@@ -1,5 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap");
 
+video.holdControls::-webkit-media-controls-panel {
+  display: flex !important;
+  opacity: 1 !important;
+}
+
 html,
 body {
   height: 100%;

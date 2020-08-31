@@ -9,7 +9,7 @@
     "dev": "preact watch",
     "lint": "eslint src",
     "test": "jest",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build -t true"
   },
   "eslintConfig": {
     "extends": "preact",
@@ -33,7 +33,6 @@
     "js-cookie": "^2.2.1",
     "preact": "^10.3.2",
     "preact-render-to-string": "^5.1.4",
-    "preact-router": "^3.2.1",
     "styled-components": "^5.1.1"
   },
   "jest": {
