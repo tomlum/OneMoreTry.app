@@ -35,13 +35,14 @@ const InputGroup = styled.div`
   padding-left: 5px;
 `;
 
-const PreviewButton = styled(Button)`
+const IconButton = styled(Button)`
   width: 40px;
-  margin-right: 10px;
   padding: 0px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-right: 10px;
+
   img {
     width: 60%;
   }
@@ -52,7 +53,6 @@ const PreviewButton = styled(Button)`
     }
   }
 `;
-
 const DownloadButton = styled(Button)`
   width: 40px;
   img {
@@ -112,6 +112,8 @@ export default function App() {
   const [ghostDelayInput, setGhostDelayInput] = useState(4);
   const [ghostDelay, setGhostDelay] = useState(ghostDelayInput);
 
+  const [mirror, setMirror] = useState(1);
+
   const downloadButtonRef = useRef(false);
 
   const appRef = useRef(null);
@@ -130,6 +132,7 @@ export default function App() {
     const saves = JSON.parse(Cookies.get("OneMoreTry"));
     saves.replayDelayInput && setReplayDelayInput(saves.replayDelayInput);
     saves.ghostDelayInput && setGhostDelayInput(saves.ghostDelayInput);
+    saves.mirror && setMirror(saves.mirror);
   }, []);
 
   useEffect(() => {
@@ -184,6 +187,7 @@ export default function App() {
           preview={preview}
           setPreview={setPreview}
           downloadButtonRef={downloadButtonRef}
+          mirror={mirror}
         />
       </Row>
       <div className="flex mt5">
@@ -221,8 +225,22 @@ export default function App() {
         </LeftCol>
 
         <MiddleCol className="justify-end">
+          <span title="Mirror Flip Camera">
+            <IconButton
+              disabled={!start}
+              onClick={() => {
+                setMirror(mirror * -1);
+              }}
+            >
+              <img
+                src={`https://s3.us-east-2.amazonaws.com/tomlum/omt-mirror-icon${
+                  mirror < 0 ? "-flip" : ""
+                }.png`}
+              ></img>
+            </IconButton>
+          </span>
           <span title="Preview without Delay">
-            <PreviewButton
+            <IconButton
               disabled={!start}
               onClick={() => {
                 setPreview(!preview);
@@ -233,7 +251,7 @@ export default function App() {
                   preview ? "-orange" : ""
                 }.png`}
               ></img>
-            </PreviewButton>
+            </IconButton>
           </span>
           <StartButton
             onKeyDown={handleSpaceDown}
@@ -252,7 +270,7 @@ export default function App() {
               }
               Cookies.set(
                 "OneMoreTry",
-                JSON.stringify({ replayDelayInput, ghostDelayInput })
+                JSON.stringify({ replayDelayInput, ghostDelayInput, mirror })
               );
               setStart(!start);
               setReplay(false);
@@ -268,12 +286,13 @@ export default function App() {
                 replaySpeed={replaySpeed}
                 setReplaySpeed={setReplaySpeed}
               />
-
-              <a ref={downloadButtonRef}>
-                <DownloadButton>
-                  <img src="https://s3.us-east-2.amazonaws.com/tomlum/omt-download.png"></img>
-                </DownloadButton>
-              </a>
+              <span title="Download webm">
+                <a ref={downloadButtonRef}>
+                  <DownloadButton>
+                    <img src="https://s3.us-east-2.amazonaws.com/tomlum/omt-download.png"></img>
+                  </DownloadButton>
+                </a>
+              </span>
             </Row>
           ) : (
             <Col>

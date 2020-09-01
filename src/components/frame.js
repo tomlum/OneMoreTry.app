@@ -41,6 +41,7 @@ const PreviewScreen = styled.video`
   height: ${screenHeight};
   min-height: ${screenMinHeight};
   min-width: ${screenMinWidth};
+  transform: scale(${({ mirror }) => mirror}, 1);
   margin: auto;
 `;
 const PreviewText = styled.div`
@@ -62,6 +63,7 @@ const Screen = styled.video`
   min-height: ${screenMinHeight};
   min-width: ${screenMinWidth};
   margin: auto;
+  transform: scale(${({ mirror }) => mirror}, 1);
 `;
 
 const OverlayBox = styled.div`
@@ -161,6 +163,7 @@ function Frame({
   preview,
   setPreview,
   downloadButtonRef,
+  mirror,
 }) {
   const [mode, setMode] = useState(null);
   const infoBoxRef = useRef(null);
@@ -501,7 +504,13 @@ function Frame({
           </Col>
         </InfoBox>
       </OverlayBox>
-      <PreviewScreen ref={previewScreenRef} autoplay playsinline muted />
+      <PreviewScreen
+        ref={previewScreenRef}
+        mirror={mirror}
+        autoplay
+        playsinline
+        muted
+      />
 
       {preview && (
         <PreviewText>
@@ -514,8 +523,20 @@ function Frame({
           <LoadingSpinner time={ghostDelay}>Loading</LoadingSpinner>
         </LoadingBox>
       )}
-      <Screen ref={screen1Ref} autoplay playsinline muted></Screen>
-      <Screen ref={screen2Ref} autoplay playsinline muted></Screen>
+      <Screen
+        ref={screen1Ref}
+        mirror={mirror}
+        autoplay
+        playsinline
+        muted
+      ></Screen>
+      <Screen
+        ref={screen2Ref}
+        mirror={mirror}
+        autoplay
+        playsinline
+        muted
+      ></Screen>
       <Screen
         className="holdControls"
         ref={replayScreenRef}
