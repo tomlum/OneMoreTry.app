@@ -20,7 +20,7 @@ body {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-  min-width: 900px;
+  min-width: 1000px;
 }
 
 div {
@@ -54,6 +54,11 @@ div {
       justify-content: flex-end;
 }
 
+.justify-space-between {
+  -ms-flex-pack: justify;
+      justify-content: space-between;
+}
+
 .flex1 {
   -ms-flex: 1;
       flex: 1;
@@ -77,5 +82,9 @@ div {
   margin-top: 5px;
 }
 
+.ml8 {
+  margin-left: 8px;
+}
 
-/*# sourceMappingURL=ssr-bundle.98bec.css.map*/
+
+/*# sourceMappingURL=ssr-bundle.8f751.css.map*/
