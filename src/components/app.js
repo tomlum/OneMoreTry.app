@@ -194,14 +194,15 @@ export default function App() {
   };
 
   return (
-    <Helmet
-      meta={[
-        {
-          name: "description",
-          content: "A Practice Camera for Practicing Anything!",
-        },
-      ]}
-    >
+    <>
+      <Helmet
+        meta={[
+          {
+            name: "description",
+            content: "A Practice Camera for Practicing Anything!",
+          },
+        ]}
+      ></Helmet>
       {showFAQ && <FAQ setShowFAQ={setShowFAQ} />}
       <div ref={appRef} id="app" onKeyDown={handleSpaceDown}>
         <Row>
@@ -368,6 +369,6 @@ export default function App() {
           </RightCol>
         </div>
       </div>
-    </Helmet>
+    </>
   );
 }
