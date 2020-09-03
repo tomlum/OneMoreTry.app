@@ -43,8 +43,10 @@ export const Button = styled.button`
   cursor: pointer;
   padding: 0px 5px;
   box-shadow: -2px 2px ${ThemeColor};
+  border: none;
   &:disabled {
     box-shadow: -3px 3px #000;
+    background-color: #888;
   }
   width: 100px;
 `;

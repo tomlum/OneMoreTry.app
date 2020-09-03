@@ -6,24 +6,33 @@ import {
   Row,
   ThemeColor,
 } from "./components";
+import { FAQ, FAQButton } from "./faq";
 import styled, { keyframes } from "styled-components";
 import { useEffect, useRef, useState } from "preact/hooks";
 
 import Cookies from "js-cookie";
 import Frame from "./frame";
 import Header from "./header";
+import Helmet from "preact-helmet";
 
 const LeftCol = styled.div`
   display: flex;
   padding: 0px 10px;
+  padding-right: 0px;
   flex: 1;
-  justify-content: flex-start;
-  align-items: center;
+  justify-content: space-between;
+  align-items: flex-start;
+`;
+const RightCol = styled.div`
+  display: flex;
+  padding: 0px 10px;
+  padding-left: 0px;
+  flex: 1;
+  justify-content: space-between;
+  align-items: flex-start;
 `;
 const MiddleCol = styled.div`
   display: flex;
-  min-width: 150px;
-  width: 185px;
   align-items: flex-start;
 `;
 
@@ -49,11 +58,10 @@ const IconButton = styled(Button)`
 
   &:disabled {
     img {
-      opacity: 0.3;
     }
   }
 `;
-const DownloadButton = styled(Button)`
+const ControlButton = styled(Button)`
   width: 40px;
   img {
     width: 60%;
@@ -101,6 +109,8 @@ export default function App() {
   const [start, setStart] = useState(false);
   const [cameraReady, setCameraReady] = useState(false);
   const [preview, setPreview] = useState(false);
+  const [mute, setMute] = useState(false);
+  const [showFAQ, setShowFAQ] = useState(false);
 
   const [replay, setReplay] = useState(false);
   const [replayReady, setReplayReady] = useState(false);
@@ -126,6 +136,19 @@ export default function App() {
     }
   };
 
+  const save = (override) => {
+    Cookies.set(
+      "OneMoreTry",
+      JSON.stringify({
+        replayDelayInput,
+        ghostDelayInput,
+        mirror,
+        mute,
+        ...override,
+      })
+    );
+  };
+
   // Init
   useEffect(() => {
     document.addEventListener("keydown", handleSpaceDown);
@@ -133,6 +156,7 @@ export default function App() {
     saves.replayDelayInput && setReplayDelayInput(saves.replayDelayInput);
     saves.ghostDelayInput && setGhostDelayInput(saves.ghostDelayInput);
     saves.mirror && setMirror(saves.mirror);
+    saves.mute && setMute(saves.mute);
   }, []);
 
   useEffect(() => {
@@ -170,153 +194,180 @@ export default function App() {
   };
 
   return (
-    <div ref={appRef} id="app" onKeyDown={handleSpaceDown}>
-      <Row>
-        <Header />
-      </Row>
-      <Row>
-        <Frame
-          start={start}
-          replay={replay}
-          ghost={Math.abs(ghostDelay) > 0}
-          ghostDelay={Math.abs(ghostDelay)}
-          replayDelay={adjustReplayTime(replayDelay)}
-          setReplayReady={setReplayReady}
-          replaySpeed={replaySpeed / 100}
-          setCameraReady={setCameraReady}
-          preview={preview}
-          setPreview={setPreview}
-          downloadButtonRef={downloadButtonRef}
-          mirror={mirror}
-        />
-      </Row>
-      <div className="flex mt5">
-        <LeftCol>
-          <Col>
-            <InputGroup>
-              <b>Camera Delay</b>
-              <Input
-                disabled={start}
-                value={ghostDelayInput}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  if (val > replayDelayInput) {
-                    setReplayDelayInput(val);
-                  }
-                  setGhostDelayInput(e.target.value);
-                }}
-                onKeyDown={onGhostInputChange}
-              ></Input>
-              <b>Seconds</b>
-            </InputGroup>
-            <InputGroup>
-              <b>Replay</b>
-              <Input
-                disabled={start}
-                value={replayDelayInput}
-                onChange={(e) => {
-                  setReplayDelayInput(e.target.value);
-                }}
-                onKeyDown={onReplayInputChange}
-              ></Input>
-              <b>Seconds</b>
-            </InputGroup>
-          </Col>
-        </LeftCol>
-
-        <MiddleCol className="justify-end">
-          <span title="Mirror Flip Camera">
-            <IconButton
-              disabled={!start}
-              onClick={() => {
-                setMirror(mirror * -1);
-              }}
-            >
-              <img
-                src={`https://s3.us-east-2.amazonaws.com/tomlum/omt-mirror-icon${
-                  mirror < 0 ? "-flip" : ""
-                }.png`}
-              ></img>
-            </IconButton>
-          </span>
-          <span title="Preview without Delay">
-            <IconButton
-              disabled={!start}
-              onClick={() => {
-                setPreview(!preview);
-              }}
-            >
-              <img
-                src={`https://s3.us-east-2.amazonaws.com/tomlum/align-icon${
-                  preview ? "-orange" : ""
-                }.png`}
-              ></img>
-            </IconButton>
-          </span>
-          <StartButton
-            onKeyDown={handleSpaceDown}
-            onClick={() => {
-              if (Math.abs(ghostDelayInput) < 1) {
-                setGhostDelay(0);
-                setGhostDelayInput(0);
-              } else {
-                setGhostDelay(ghostDelayInput);
-              }
-              if (Math.abs(replayDelayInput) < 1) {
-                setReplayDelay(0);
-                setReplayDelayInput(0);
-              } else {
-                setReplayDelay(replayDelayInput);
-              }
-              Cookies.set(
-                "OneMoreTry",
-                JSON.stringify({ replayDelayInput, ghostDelayInput, mirror })
-              );
-              setStart(!start);
-              setReplay(false);
-            }}
-          >
-            <b>{start ? "STOP" : replay ? "RESUME" : "START"}</b>
-          </StartButton>
-        </MiddleCol>
-        <MiddleCol>
-          {replay ? (
-            <Row className="align-start">
-              <ReplaySpeedSlider
-                replaySpeed={replaySpeed}
-                setReplaySpeed={setReplaySpeed}
-              />
-              <span title="Download webm">
-                <a ref={downloadButtonRef}>
-                  <DownloadButton>
-                    <img src="https://s3.us-east-2.amazonaws.com/tomlum/omt-download.png"></img>
-                  </DownloadButton>
-                </a>
-              </span>
-            </Row>
-          ) : (
+    <Helmet
+      meta={[
+        {
+          name: "description",
+          content: "A Practice Camera for Practicing Anything!",
+        },
+      ]}
+    >
+      {showFAQ && <FAQ setShowFAQ={setShowFAQ} />}
+      <div ref={appRef} id="app" onKeyDown={handleSpaceDown}>
+        <Row>
+          <Header setShowFAQ={setShowFAQ} />
+        </Row>
+        <Row>
+          <Frame
+            start={start}
+            replay={replay}
+            ghost={Math.abs(ghostDelay) > 0}
+            ghostDelay={Math.abs(ghostDelay)}
+            replayDelay={adjustReplayTime(replayDelay)}
+            setReplayReady={setReplayReady}
+            replaySpeed={replaySpeed / 100}
+            setCameraReady={setCameraReady}
+            preview={preview}
+            mute={mute}
+            setPreview={setPreview}
+            downloadButtonRef={downloadButtonRef}
+            mirror={mirror}
+          />
+        </Row>
+        <div className="flex mt5">
+          <LeftCol>
             <Col>
-              <ReplayButtonContainer>
-                {cameraReady && !replayReady && start && ghostDelay > 0 && (
-                  <LoadingButton time={ghostDelay + 0.1} />
-                )}
-                <Button
-                  className="absolute"
-                  disabled={!replayReady}
+              <InputGroup>
+                <b>Camera Delay</b>
+                <Input
+                  disabled={start}
+                  value={ghostDelayInput}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val > replayDelayInput) {
+                      setReplayDelayInput(val);
+                    }
+                    setGhostDelayInput(e.target.value);
+                  }}
+                  onKeyDown={onGhostInputChange}
+                ></Input>
+                <b>Seconds</b>
+              </InputGroup>
+              <InputGroup>
+                <b>Replay</b>
+                <Input
+                  disabled={start}
+                  value={replayDelayInput}
+                  onChange={(e) => {
+                    setReplayDelayInput(e.target.value);
+                  }}
+                  onKeyDown={onReplayInputChange}
+                ></Input>
+                <b>Seconds</b>
+              </InputGroup>
+            </Col>
+
+            <MiddleCol className="justify-end">
+              <span title="Mirror Flip Camera">
+                <IconButton
+                  disabled={!start}
                   onClick={() => {
-                    setReplay(!replay);
-                    setStart(false);
+                    save({ mirror: mirror * -1 });
+                    setMirror(mirror * -1);
                   }}
                 >
-                  <b>REPLAY</b>
-                </Button>
-              </ReplayButtonContainer>
-              <Hint>[spacebar]</Hint>
-            </Col>
-          )}
-        </MiddleCol>
-        <Col className="flex1" />
+                  <img
+                    src={`https://s3.us-east-2.amazonaws.com/tomlum/omt-mirror-icon${
+                      mirror < 0 ? "-flip" : ""
+                    }.png`}
+                  ></img>
+                </IconButton>
+              </span>
+              <span title="Preview without Delay">
+                <IconButton
+                  disabled={!start}
+                  onClick={() => {
+                    setPreview(!preview);
+                  }}
+                >
+                  <img
+                    src={`https://s3.us-east-2.amazonaws.com/tomlum/align-icon${
+                      preview ? "-orange" : ""
+                    }.png`}
+                  ></img>
+                </IconButton>
+              </span>
+              <StartButton
+                onKeyDown={handleSpaceDown}
+                onClick={() => {
+                  if (Math.abs(ghostDelayInput) < 1) {
+                    setGhostDelay(0);
+                    setGhostDelayInput(0);
+                  } else {
+                    setGhostDelay(ghostDelayInput);
+                  }
+                  if (Math.abs(replayDelayInput) < 1) {
+                    setReplayDelay(0);
+                    setReplayDelayInput(0);
+                  } else {
+                    setReplayDelay(replayDelayInput);
+                  }
+                  save();
+                  setStart(!start);
+                  setReplay(false);
+                }}
+              >
+                <b>{start ? "STOP" : replay ? "RESUME" : "START"}</b>
+              </StartButton>
+            </MiddleCol>
+          </LeftCol>
+          <RightCol>
+            <MiddleCol>
+              {replay ? (
+                <Row className="align-start">
+                  <ReplaySpeedSlider
+                    replaySpeed={replaySpeed}
+                    setReplaySpeed={setReplaySpeed}
+                  />
+                  <span title="Mute">
+                    <ControlButton
+                      onClick={() => {
+                        save({ mute: !mute });
+                        setMute(!mute);
+                      }}
+                    >
+                      <img
+                        src={`https://s3.us-east-2.amazonaws.com/tomlum/omt-mute-${
+                          mute ? "on" : "off"
+                        }.png`}
+                      ></img>
+                    </ControlButton>
+                  </span>
+                  <span title="Download webm">
+                    <a ref={downloadButtonRef}>
+                      <ControlButton>
+                        <img src="https://s3.us-east-2.amazonaws.com/tomlum/omt-download.png"></img>
+                      </ControlButton>
+                    </a>
+                  </span>
+                  <div className={"ml8"}>
+                    <FAQButton setShowFAQ={setShowFAQ} />
+                  </div>
+                </Row>
+              ) : (
+                <Col>
+                  <ReplayButtonContainer>
+                    {cameraReady && !replayReady && start && ghostDelay > 0 && (
+                      <LoadingButton time={ghostDelay + 0.1} />
+                    )}
+                    <Button
+                      className="absolute"
+                      disabled={!replayReady}
+                      onClick={() => {
+                        setReplay(!replay);
+                        setStart(false);
+                      }}
+                    >
+                      <b>REPLAY</b>
+                    </Button>
+                  </ReplayButtonContainer>
+                  <Hint>[spacebar]</Hint>
+                </Col>
+              )}
+            </MiddleCol>
+          </RightCol>
+        </div>
       </div>
-    </div>
+    </Helmet>
   );
 }

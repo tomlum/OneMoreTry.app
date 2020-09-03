@@ -18,7 +18,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-size: 17px;
   user-select: none;
-  min-width: 900px;
+  min-width: 1000px;
 }
 
 div {
@@ -49,6 +49,10 @@ div {
   justify-content: flex-end;
 }
 
+.justify-space-between {
+  justify-content: space-between;
+}
+
 .flex1 {
   flex: 1;
 }
@@ -67,4 +71,8 @@ div {
 
 .mt5 {
   margin-top: 5px;
+}
+
+.ml8 {
+  margin-left: 8px;
 }

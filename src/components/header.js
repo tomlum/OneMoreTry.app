@@ -1,6 +1,8 @@
 import { Row, ThemeColor } from "./components";
 import styled, { keyframes } from "styled-components";
 
+import { FAQButton } from "./faq";
+
 const waveKeyframes = keyframes`
   0% { margin-bottom: 0px;}
   25%{ margin-bottom: -4px;}
@@ -50,7 +52,7 @@ const TwitterImage = styled.img`
   animation-delay: 0.2s;
 `;
 
-export default function Header() {
+export default function Header({ setShowFAQ }) {
   return (
     <HeaderContainer>
       <Row className="flex1" />
@@ -58,12 +60,17 @@ export default function Header() {
         <Title>One More Try!</Title>
       </Row>
       <Row className="justify-start flex1">
-        <a href="https://www.tomlum.com/" target="_blank">
-          <LogoImage src="https://s3.us-east-2.amazonaws.com/tomlum/orange--me.png" />
-        </a>
-        <a href="https://twitter.com/tomlumperson" target="_blank">
-          <TwitterImage src="https://s3.us-east-2.amazonaws.com/tomlum/orange--bird.png" />
-        </a>
+        <span title="TomLum.com">
+          <a href="https://www.tomlum.com/" target="_blank">
+            <LogoImage src="https://s3.us-east-2.amazonaws.com/tomlum/orange--me.png" />
+          </a>
+        </span>
+        <span title="Twitter">
+          <a href="https://twitter.com/tomlumperson" target="_blank">
+            <TwitterImage src="https://s3.us-east-2.amazonaws.com/tomlum/orange--bird.png" />
+          </a>
+        </span>
+        <FAQButton setShowFAQ={setShowFAQ} />
       </Row>
     </HeaderContainer>
   );

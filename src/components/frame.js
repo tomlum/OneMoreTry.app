@@ -164,6 +164,7 @@ function Frame({
   setPreview,
   downloadButtonRef,
   mirror,
+  mute,
 }) {
   const [mode, setMode] = useState(null);
   const infoBoxRef = useRef(null);
@@ -544,6 +545,7 @@ function Frame({
         playsinline
         controls
         loop
+        muted={mute}
       ></Screen>
     </Container>
   );
