@@ -45,13 +45,13 @@ div {
 }
 
 .justify-end {
-  -ms-flex-pack: end;
-      justify-content: flex-end;
+  -ms-flex-pack: end !important;
+      justify-content: flex-end !important;
 }
 
 .justify-start {
-  -ms-flex-pack: end;
-      justify-content: flex-end;
+  -ms-flex-pack: start !important;
+      justify-content: flex-start !important;
 }
 
 .justify-space-between {
@@ -87,4 +87,4 @@ div {
 }
 
 
-/*# sourceMappingURL=ssr-bundle.8f751.css.map*/
+/*# sourceMappingURL=ssr-bundle.9c170.css.map*/
