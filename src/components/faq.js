@@ -26,8 +26,10 @@ export const Overlay = styled.div`
   z-index: 20;
   position: absolute;
   top: 20px;
-  left: 120px;
-  right: 120px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 400px;
   font-family: arial;
   border: solid 5px ${ThemeColor};
   border-radius: 10px;
