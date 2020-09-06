@@ -20,7 +20,7 @@ body {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-  min-width: 1000px;
+  min-width: 620px;
 }
 
 div {
@@ -91,5 +91,9 @@ hr {
   margin-left: 8px;
 }
 
+.w55px {
+  width: 55px;
+}
 
-/*# sourceMappingURL=ssr-bundle.340c9.css.map*/
+
+/*# sourceMappingURL=ssr-bundle.089e7.css.map*/
