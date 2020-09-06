@@ -18,7 +18,7 @@ import Helmet from "preact-helmet";
 const LeftCol = styled.div`
   display: flex;
   padding: 0px 10px;
-  padding-right: 0px;
+  padding-right: 5px;
   flex: 1;
   justify-content: space-between;
   align-items: flex-start;
@@ -26,7 +26,7 @@ const LeftCol = styled.div`
 const RightCol = styled.div`
   display: flex;
   padding: 0px 10px;
-  padding-left: 0px;
+  padding-left: 5px;
   flex: 1;
   justify-content: space-between;
   align-items: flex-start;
@@ -90,9 +90,7 @@ const buttonLoadKeyframes = keyframes`
     }
 `;
 
-const StartButton = styled(Button)`
-  margin-right: 20px;
-`;
+const StartButton = styled(Button)``;
 const LoadingButton = styled(Button)`
   position: absolute;
   width: 0%;
@@ -153,10 +151,11 @@ export default function App() {
   useEffect(() => {
     document.addEventListener("keydown", handleSpaceDown);
     const saves = JSON.parse(Cookies.get("OneMoreTry"));
-    saves.replayDelayInput && setReplayDelayInput(saves.replayDelayInput);
-    saves.ghostDelayInput && setGhostDelayInput(saves.ghostDelayInput);
-    saves.mirror && setMirror(saves.mirror);
-    saves.mute && setMute(saves.mute);
+    saves.replayDelayInput !== null &&
+      setReplayDelayInput(saves.replayDelayInput);
+    saves.ghostDelayInput !== null && setGhostDelayInput(saves.ghostDelayInput);
+    saves.mirror !== null && setMirror(saves.mirror);
+    saves.mute !== null && setMute(saves.mute);
   }, []);
 
   useEffect(() => {
@@ -178,18 +177,29 @@ export default function App() {
     }
     if (newValue && newValue > replayDelayInput) {
       setReplayDelayInput(newValue);
+      save({ ghostDelayInput: newValue, replayDelayInput: newValue });
+    } else {
+      if (newValue !== null) {
+        save({ ghostDelayInput: newValue });
+      }
     }
   };
 
   const onReplayInputChange = (e) => {
     e = e || window.event;
+    let newValue = null;
     if (e.keyCode === 38) {
       e.preventDefault();
-      setReplayDelayInput(Math.max(0, Math.floor(replayDelayInput + 1)));
+      newValue = Math.max(0, Math.floor(replayDelayInput + 1));
+      setReplayDelayInput(newValue);
     }
     if (e.keyCode === 40) {
       e.preventDefault();
-      setReplayDelayInput(Math.max(0, Math.ceil(replayDelayInput - 1)));
+      newValue = Math.max(0, Math.ceil(replayDelayInput - 1));
+      setReplayDelayInput(newValue);
+    }
+    if (newValue) {
+      save({ replayDelayInput: newValue });
     }
   };
 

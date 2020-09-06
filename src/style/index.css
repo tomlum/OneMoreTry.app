@@ -11,7 +11,7 @@ body {
   width: 100%;
   padding: 0;
   margin: 0;
-  background: #3a3f4d;
+  background: #1f2846;
   font-family: "Helvetica Neue", arial, sans-serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
@@ -27,6 +27,11 @@ div {
 
 * {
   box-sizing: border-box;
+}
+
+hr {
+  border: solid 1px;
+  color: #888;
 }
 
 .center {

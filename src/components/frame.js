@@ -94,6 +94,7 @@ const InfoBox = styled.div`
   transition: opacity 0.4s;
   overflow: hidden;
   width: 100%;
+  padding: 10px 0px;
 
   .content {
     height: 100%;
@@ -145,10 +146,16 @@ const Description = styled.div`
 `;
 
 const Footnote = styled.div`
+  font-size: 15px;
   color: #666 !important;
   a {
     color: #666;
   }
+`;
+
+const Apology = styled.div`
+  margin-top: 10px;
+  color: #d83131 !important;
 `;
 
 function Frame({
@@ -172,6 +179,7 @@ function Frame({
   const screen2Ref = useRef(null);
   const previewScreenRef = useRef(null);
   const replayScreenRef = useRef(null);
+  const youtubeRef = useRef(null);
 
   const ghostRecorder1 = useRef(null);
   const ghostRecorder2 = useRef(null);
@@ -262,8 +270,12 @@ function Frame({
 
     if (mode === "STOP" || mode === null) {
       infoBoxRef.current.style.opacity = 1;
+      infoBoxRef.current.style.zIndex = 10;
+      youtubeRef.current.src = "https://www.youtube.com/embed/BUu0Wt0l61A";
     } else {
       infoBoxRef.current.style.opacity = 0;
+      infoBoxRef.current.style.zIndex = 0;
+      youtubeRef.current.src = "";
     }
 
     if (mode === "REPLAY") {
@@ -302,62 +314,62 @@ function Frame({
 
         previewScreenRef.current.srcObject = streamRef.current;
         await previewScreenRef.current.play();
-
-        replayRecorder1.current = new MediaRecorder(
-          previewScreenRef.current.captureStream
-            ? previewScreenRef.current.captureStream({
-                mimeType: "video/webm",
-              })
-            : previewScreenRef.current.mozCaptureStream({
-                mimeType: "video/webm",
-              }),
-          {
-            mimeType: "video/webm",
-          }
-        );
-        replayRecorder2.current = new MediaRecorder(
-          previewScreenRef.current.captureStream
-            ? previewScreenRef.current.captureStream({
-                mimeType: "video/webm",
-              })
-            : previewScreenRef.current.mozCaptureStream({
-                mimeType: "video/webm",
-              }),
-          {
-            mimeType: "video/webm",
-          }
-        );
-        replayRecorder1.current.ondataavailable = (event) => {
-          longerReplayRecorder.current = 2;
-          if (finalReplay.current) {
-            setPreviewVideo(event.data);
-          }
-          finalReplay.current = false;
-        };
-        replayRecorder2.current.ondataavailable = (event) => {
-          longerReplayRecorder.current = 1;
-          if (finalReplay.current) {
-            setPreviewVideo(event.data);
-          }
-          finalReplay.current = false;
-        };
-
-        replayRecorder1.current.start();
-        replayStaggerTimeout.current = window.setTimeout(async () => {
-          replayRecorder2.current.start();
-        }, replayDelay * 1000 + ghostDelay * 1000);
-
-        replayInterval.current = window.setInterval(async () => {
-          await replayRecorder1.current.stop();
-          await replayRecorder1.current.start();
-          replayStaggerTimeout.current = window.setTimeout(async () => {
-            await replayRecorder2.current.stop();
-            await replayRecorder2.current.start();
-          }, replayDelay * 1000 + ghostDelay * 1000);
-        }, (replayDelay * 1000 + ghostDelay * 1000) * 2);
-
-        setCameraReady(true);
       }
+
+      replayRecorder1.current = new MediaRecorder(
+        previewScreenRef.current.captureStream
+          ? previewScreenRef.current.captureStream({
+              mimeType: "video/webm",
+            })
+          : previewScreenRef.current.mozCaptureStream({
+              mimeType: "video/webm",
+            }),
+        {
+          mimeType: "video/webm",
+        }
+      );
+      replayRecorder2.current = new MediaRecorder(
+        previewScreenRef.current.captureStream
+          ? previewScreenRef.current.captureStream({
+              mimeType: "video/webm",
+            })
+          : previewScreenRef.current.mozCaptureStream({
+              mimeType: "video/webm",
+            }),
+        {
+          mimeType: "video/webm",
+        }
+      );
+      replayRecorder1.current.ondataavailable = (event) => {
+        longerReplayRecorder.current = 2;
+        if (finalReplay.current) {
+          setPreviewVideo(event.data);
+        }
+        finalReplay.current = false;
+      };
+      replayRecorder2.current.ondataavailable = (event) => {
+        longerReplayRecorder.current = 1;
+        if (finalReplay.current) {
+          setPreviewVideo(event.data);
+        }
+        finalReplay.current = false;
+      };
+      longerReplayRecorder.current = 1;
+      replayRecorder1.current.start();
+      replayStaggerTimeout.current = window.setTimeout(async () => {
+        replayRecorder2.current.start();
+      }, replayDelay * 1000 + ghostDelay * 1000);
+
+      replayInterval.current = window.setInterval(async () => {
+        await replayRecorder1.current.stop();
+        await replayRecorder1.current.start();
+        replayStaggerTimeout.current = window.setTimeout(async () => {
+          await replayRecorder2.current.stop();
+          await replayRecorder2.current.start();
+        }, replayDelay * 1000 + ghostDelay * 1000);
+      }, (replayDelay * 1000 + ghostDelay * 1000) * 2);
+
+      setCameraReady(true);
     } else {
       // Stop Stream
       streamRef.current = null;
@@ -467,19 +479,20 @@ function Frame({
           <Col className="content align-center">
             <div>
               {noMediaRecorder && (
-                <Footnote>
+                <Apology>
                   Sorry, this browser does not support this app yet!
-                </Footnote>
+                </Apology>
               )}
             </div>
-            <video
-              alt="Drawing of people using One More Try"
-              playsinline
-              autoplay
-              muted
-              loop
-              // src="https://s3.us-east-2.amazonaws.com/tomlum/omtloop.mp4"
-            ></video>
+            <iframe
+              ref={youtubeRef}
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/BUu0Wt0l61A"
+              frameborder="0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
             <Description>
               <div>
                 One More Try uses a <b>Delay Camera</b> that lets you
