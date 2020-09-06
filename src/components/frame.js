@@ -5,6 +5,13 @@ import { Col } from "./components";
 import { createRef } from "preact";
 import { memo } from "preact/compat";
 
+let noMediaRecorder = false;
+try {
+  MediaRecorder;
+} catch {
+  noMediaRecorder = true;
+}
+
 const spinKeyframes = keyframes`
     from {
         transform: rotate(0deg);
@@ -196,8 +203,6 @@ function Frame({
 
   const loadingTimeout = useRef(null);
 
-  const [noMediaRecorder, setNoMediaRecorder] = useState(false);
-
   const [showLoading, setShowLoading] = useState(false);
 
   let streamRef = createRef();
@@ -219,14 +224,6 @@ function Frame({
     }-${date.getDate()}__${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}.webm`;
     replayScreenRef.current.src = replayBlobURL.current;
   };
-
-  useEffect(() => {
-    try {
-      MediaRecorder;
-    } catch {
-      setNoMediaRecorder(true);
-    }
-  }, []);
 
   useEffect(() => {
     try {

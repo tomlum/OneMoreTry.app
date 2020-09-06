@@ -18,7 +18,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-size: 17px;
   user-select: none;
-  min-width: 1000px;
+  min-width: 620px;
 }
 
 div {
@@ -80,4 +80,8 @@ hr {
 
 .ml8 {
   margin-left: 8px;
+}
+
+.w55px {
+  width: 55px;
 }

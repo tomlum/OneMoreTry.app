@@ -42,7 +42,7 @@ const IconRow = styled(Row)`
 
 const LogoImage = styled.img`
   width: 50px;
-  margin-top: 5px;
+  margin-top: 10px;
   cursor: pointer;
   animation: ${waveKeyframes} 1.5s ease-in-out;
   animation-delay: 0.1s;
@@ -50,7 +50,7 @@ const LogoImage = styled.img`
 
 const TwitterImage = styled.img`
   width: 50px;
-  margin-top: 10px;
+  margin-top: 15px;
   cursor: pointer;
   animation: ${waveKeyframes} 1.5s ease-in-out;
   animation-delay: 0.2s;

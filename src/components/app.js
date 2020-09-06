@@ -33,7 +33,17 @@ const RightCol = styled.div`
 `;
 const MiddleCol = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
+  @media (max-width: 800px) {
+  }
+`;
+const MainButton = styled.div`
+  display: flex;
+  margin-bottom: 8px;
+`;
+const SubButtons = styled.div`
+  display: flex;
 `;
 
 const InputGroup = styled.div`
@@ -42,6 +52,7 @@ const InputGroup = styled.div`
   align-items: center;
   box-shadow: -8px 0px 0 -5px ${ThemeColor};
   padding-left: 5px;
+  margin-bottom: 5px;
 `;
 
 const IconButton = styled(Button)`
@@ -90,7 +101,9 @@ const buttonLoadKeyframes = keyframes`
     }
 `;
 
-const StartButton = styled(Button)``;
+const StartButton = styled(Button)`
+  width: 90px;
+`;
 const LoadingButton = styled(Button)`
   position: absolute;
   width: 0%;
@@ -209,7 +222,20 @@ export default function App() {
         meta={[
           {
             name: "description",
-            content: "A Practice Camera for Practicing Anything!",
+            content: "A Delay Camera for Practicing Anything!",
+          },
+          {
+            property: "og:description",
+            content: "A Delay Camera for Practicing Anything!",
+          },
+          {
+            property: "og:image",
+            content:
+              "https://s3.us-east-2.amazonaws.com/tomlum/omt-og-image.png",
+          },
+          {
+            property: "og:title",
+            content: "One More Try!",
           },
         ]}
       ></Helmet>
@@ -239,7 +265,7 @@ export default function App() {
           <LeftCol>
             <Col>
               <InputGroup>
-                <b>Camera Delay</b>
+                <b className="w55px">Delay</b>
                 <Input
                   disabled={start}
                   value={ghostDelayInput}
@@ -255,7 +281,7 @@ export default function App() {
                 <b>Seconds</b>
               </InputGroup>
               <InputGroup>
-                <b>Replay</b>
+                <b className="w55px">Replay</b>
                 <Input
                   disabled={start}
                   value={replayDelayInput}
@@ -269,57 +295,61 @@ export default function App() {
             </Col>
 
             <MiddleCol className="justify-end">
-              <span title="Mirror Flip Camera">
-                <IconButton
-                  disabled={!start}
+              <MainButton>
+                <StartButton
+                  onKeyDown={handleSpaceDown}
                   onClick={() => {
-                    save({ mirror: mirror * -1 });
-                    setMirror(mirror * -1);
+                    if (Math.abs(ghostDelayInput) < 1) {
+                      setGhostDelay(0);
+                      setGhostDelayInput(0);
+                    } else {
+                      setGhostDelay(ghostDelayInput);
+                    }
+                    if (Math.abs(replayDelayInput) < 1) {
+                      setReplayDelay(0);
+                      setReplayDelayInput(0);
+                    } else {
+                      setReplayDelay(replayDelayInput);
+                    }
+                    save();
+                    setStart(!start);
+                    setReplay(false);
                   }}
                 >
-                  <img
-                    src={`https://s3.us-east-2.amazonaws.com/tomlum/omt-mirror-icon${
-                      mirror < 0 ? "-flip" : ""
-                    }.png`}
-                  ></img>
-                </IconButton>
-              </span>
-              <span title="Preview without Delay">
-                <IconButton
-                  disabled={!start}
-                  onClick={() => {
-                    setPreview(!preview);
-                  }}
-                >
-                  <img
-                    src={`https://s3.us-east-2.amazonaws.com/tomlum/align-icon${
-                      preview ? "-orange" : ""
-                    }.png`}
-                  ></img>
-                </IconButton>
-              </span>
-              <StartButton
-                onKeyDown={handleSpaceDown}
-                onClick={() => {
-                  if (Math.abs(ghostDelayInput) < 1) {
-                    setGhostDelay(0);
-                    setGhostDelayInput(0);
-                  } else {
-                    setGhostDelay(ghostDelayInput);
-                  }
-                  if (Math.abs(replayDelayInput) < 1) {
-                    setReplayDelay(0);
-                    setReplayDelayInput(0);
-                  } else {
-                    setReplayDelay(replayDelayInput);
-                  }
-                  save();
-                  setStart(!start);
-                  setReplay(false);
-                }}
-              >
-                <b>{start ? "STOP" : replay ? "RESUME" : "START"}</b>
-              </StartButton>
+                  <b>{start ? "STOP" : "START"}</b>
+                </StartButton>
+              </MainButton>
+              <SubButtons>
+                <span title="Mirror Flip Camera">
+                  <IconButton
+                    disabled={!start}
+                    onClick={() => {
+                      save({ mirror: mirror * -1 });
+                      setMirror(mirror * -1);
+                    }}
+                  >
+                    <img
+                      src={`https://s3.us-east-2.amazonaws.com/tomlum/omt-mirror-icon${
+                        mirror < 0 ? "-flip" : ""
+                      }.png`}
+                    ></img>
+                  </IconButton>
+                </span>
+                <span title="Preview without Delay">
+                  <IconButton
+                    disabled={!start}
+                    onClick={() => {
+                      setPreview(!preview);
+                    }}
+                  >
+                    <img
+                      src={`https://s3.us-east-2.amazonaws.com/tomlum/align-icon${
+                        preview ? "-orange" : ""
+                      }.png`}
+                    ></img>
+                  </IconButton>
+                </span>
+              </SubButtons>
             </MiddleCol>
           </LeftCol>
           <RightCol>
