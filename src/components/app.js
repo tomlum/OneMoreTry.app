@@ -163,12 +163,14 @@ export default function App() {
   // Init
   useEffect(() => {
     document.addEventListener("keydown", handleSpaceDown);
-    const saves = JSON.parse(Cookies.get("OneMoreTry"));
-    saves.replayDelayInput !== null &&
+    const cookies = Cookies.get("OneMorddeTry");
+    const saves = cookies ? JSON.parse(cookies) : {};
+    saves.replayDelayInput !== undefined &&
       setReplayDelayInput(saves.replayDelayInput);
-    saves.ghostDelayInput !== null && setGhostDelayInput(saves.ghostDelayInput);
-    saves.mirror !== null && setMirror(saves.mirror);
-    saves.mute !== null && setMute(saves.mute);
+    saves.ghostDelayInput !== undefined &&
+      setGhostDelayInput(saves.ghostDelayInput);
+    saves.mirror !== undefined && setMirror(saves.mirror);
+    saves.mute !== undefined && setMute(saves.mute);
   }, []);
 
   useEffect(() => {
