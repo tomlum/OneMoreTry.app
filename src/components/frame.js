@@ -12,26 +12,6 @@ try {
   noMediaRecorder = true;
 }
 
-const spinKeyframes = keyframes`
-    from {
-        transform: rotate(0deg);
-    } to {
-        transform: rotate(360deg);
-    }
-`;
-
-const LoadingSpinner = styled.div`
-  z-index: 100;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  animation: ${spinKeyframes} ${({ time }) => time}s linear infinite;
-`;
-
 const Container = styled.div`
   display: flex;
   position: relative;
@@ -88,6 +68,49 @@ const OverlayBox = styled.div`
 
 const LoadingBox = styled(OverlayBox)`
   text-shadow: 0px 0px 4px black;
+  margin-top: 30px;
+`;
+
+const LoadingIcon = styled.div`
+  position: relative;
+  margin-top: 50px;
+  width: 100px;
+  height: 100px;
+  h2 {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+`;
+
+const spinKeyframes = keyframes`
+    from {
+        transform: rotate(0deg);
+    } to {
+        transform: rotate(-360deg);
+    }
+`;
+
+const LoadingSpinner = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: ${spinKeyframes} ${({ time }) => time}s linear infinite;
+  img {
+    width: 100px;
+  }
 `;
 
 const InfoBox = styled.div`
@@ -181,6 +204,8 @@ function Frame({
   mute,
 }) {
   const [mode, setMode] = useState(null);
+  const [countdown, setCountdown] = useState(0);
+  const countdownRef = useRef(0);
   const infoBoxRef = useRef(null);
   const screen1Ref = useRef(null);
   const screen2Ref = useRef(null);
@@ -202,6 +227,7 @@ function Frame({
   const finalReplay = useRef(false);
 
   const loadingTimeout = useRef(null);
+  const loadingCountdownInterval = useRef(null);
 
   const [showLoading, setShowLoading] = useState(false);
 
@@ -243,7 +269,9 @@ function Frame({
     } else if (!ghost) {
       setMode("STREAM");
     }
-  }, [[start, ghostDelay, ghost, replay]]);
+    setCountdown(Math.ceil(ghostDelay));
+    countdownRef.current = Math.ceil(ghostDelay);
+  }, [start, ghostDelay, ghost, replay]);
 
   useEffect(() => {
     if (preview) {
@@ -268,7 +296,7 @@ function Frame({
     if (mode === "STOP" || mode === null) {
       infoBoxRef.current.style.opacity = 1;
       infoBoxRef.current.style.zIndex = 10;
-      youtubeRef.current.src = "https://www.youtube.com/embed/BUu0Wt0l61A";
+      youtubeRef.current.src = "https://www.youtube.com/embed/lF0RyMKZKU8";
     } else {
       infoBoxRef.current.style.opacity = 0;
       infoBoxRef.current.style.zIndex = 0;
@@ -431,6 +459,14 @@ function Frame({
         setShowLoading(false);
       }, ghostDelay * 1000);
 
+      loadingCountdownInterval.current = window.setInterval(() => {
+        setCountdown(countdownRef.current - 1);
+        countdownRef.current = countdownRef.current - 1;
+        if (countdownRef.current <= 0) {
+          clearInterval(loadingCountdownInterval.current);
+        }
+      }, 1000);
+
       ghostStaggerTimeout.current = window.setTimeout(async () => {
         await ghostRecorder2.current.start();
       }, ghostDelay * 1000 * 0.5);
@@ -460,6 +496,7 @@ function Frame({
       clearTimeout(loadingTimeout.current);
       clearInterval(ghostInterval.current);
       clearTimeout(ghostStaggerTimeout.current);
+      clearInterval(loadingCountdownInterval.current);
       screen2Ref.current.src = null;
       screen1Ref.current.src = null;
       screen2Ref.current.style.opacity = 0;
@@ -485,7 +522,7 @@ function Frame({
               ref={youtubeRef}
               width="560"
               height="315"
-              src="https://www.youtube.com/embed/BUu0Wt0l61A"
+              src="https://www.youtube.com/embed/lF0RyMKZKU8"
               frameborder="0"
               allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen
@@ -531,7 +568,12 @@ function Frame({
       {showLoading && (
         <LoadingBox>
           <h3>Get Started! Your Delay Camera is just catching up!</h3>
-          <LoadingSpinner time={ghostDelay}>Loading</LoadingSpinner>
+          <LoadingIcon>
+            <LoadingSpinner time={ghostDelay}>
+              <img src="https://s3.us-east-2.amazonaws.com/tomlum/omt-loading-icon.png"></img>
+            </LoadingSpinner>
+            <h2>{countdown}</h2>
+          </LoadingIcon>
         </LoadingBox>
       )}
       <Screen

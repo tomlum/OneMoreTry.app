@@ -163,7 +163,7 @@ export default function App() {
   // Init
   useEffect(() => {
     document.addEventListener("keydown", handleSpaceDown);
-    const cookies = Cookies.get("OneMorddeTry");
+    const cookies = Cookies.get("OneMoreTry");
     const saves = cookies ? JSON.parse(cookies) : {};
     saves.replayDelayInput !== undefined &&
       setReplayDelayInput(saves.replayDelayInput);
@@ -345,7 +345,7 @@ export default function App() {
                     }}
                   >
                     <img
-                      src={`https://s3.us-east-2.amazonaws.com/tomlum/align-icon${
+                      src={`https://s3.us-east-2.amazonaws.com/tomlum/omt-align-icon${
                         preview ? "-orange" : ""
                       }.png`}
                     ></img>
