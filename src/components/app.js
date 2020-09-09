@@ -13,7 +13,6 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import Cookies from "js-cookie";
 import Frame from "./frame";
 import Header from "./header";
-import Helmet from "preact-helmet";
 
 const LeftCol = styled.div`
   display: flex;
@@ -220,27 +219,6 @@ export default function App() {
 
   return (
     <>
-      <Helmet
-        meta={[
-          {
-            name: "description",
-            content: "A Delay Camera for Practicing Anything!",
-          },
-          {
-            property: "og:description",
-            content: "A Delay Camera for Practicing Anything!",
-          },
-          {
-            property: "og:image",
-            content:
-              "https://s3.us-east-2.amazonaws.com/tomlum/omt-og-image.png",
-          },
-          {
-            property: "og:title",
-            content: "One More Try!",
-          },
-        ]}
-      ></Helmet>
       {showFAQ && <FAQ setShowFAQ={setShowFAQ} />}
       <div ref={appRef} id="app" onKeyDown={handleSpaceDown}>
         <Row>
