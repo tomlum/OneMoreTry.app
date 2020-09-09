@@ -296,7 +296,7 @@ function Frame({
     if (mode === "STOP" || mode === null) {
       infoBoxRef.current.style.opacity = 1;
       infoBoxRef.current.style.zIndex = 10;
-      youtubeRef.current.src = "https://www.youtube.com/embed/lF0RyMKZKU8";
+      youtubeRef.current.src = "https://www.youtube.com/embed/YgE7JeN8Wx4";
     } else {
       infoBoxRef.current.style.opacity = 0;
       infoBoxRef.current.style.zIndex = 0;
@@ -522,7 +522,7 @@ function Frame({
               ref={youtubeRef}
               width="560"
               height="315"
-              src="https://www.youtube.com/embed/lF0RyMKZKU8"
+              src="https://www.youtube.com/embed/YgE7JeN8Wx4"
               frameborder="0"
               allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen
