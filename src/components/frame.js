@@ -17,7 +17,7 @@ const Container = styled.div`
   position: relative;
   overflow: hidden;
 `;
-const screenHeight = `calc(100vh - 120px)`;
+const screenHeight = `calc(100vh - 122px)`;
 const screenMinHeight = `500px`;
 const screenMinWidth = `0px`;
 const PreviewScreen = styled.video`

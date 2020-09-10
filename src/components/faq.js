@@ -67,6 +67,7 @@ export const Overlay = styled.div`
 
   img {
     width: 30px;
+    height: 30px;
     padding: 4px;
     border: solid 1px black;
     background-color: white;
