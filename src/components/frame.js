@@ -634,16 +634,18 @@ function Frame({
         src={"https://s3.us-east-2.amazonaws.com/tomlum/omt-delay-mute-on.png"}
         style={{ zIndex: 10000 }}
         onClick={() => {
-          ghostMute.current = !ghostMute.current;
-          if (!ghostMute.current) {
-            screen1Ref.current.muted = false;
-          } else {
-            screen1Ref.current.muted = true;
-            screen2Ref.current.muted = true;
+          if (muteButtonRef.current.style.opacity > 0) {
+            ghostMute.current = !ghostMute.current;
+            if (!ghostMute.current) {
+              screen1Ref.current.muted = false;
+            } else {
+              screen1Ref.current.muted = true;
+              screen2Ref.current.muted = true;
+            }
+            muteButtonRef.current.src = `https://s3.us-east-2.amazonaws.com/tomlum/omt-delay-mute-${
+              ghostMute.current ? "on" : "off"
+            }.png`;
           }
-          muteButtonRef.current.src = `https://s3.us-east-2.amazonaws.com/tomlum/omt-delay-mute-${
-            ghostMute.current ? "on" : "off"
-          }.png`;
         }}
       ></MuteButton>
     </Container>
