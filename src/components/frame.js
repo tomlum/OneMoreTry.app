@@ -188,6 +188,17 @@ const Apology = styled.div`
   color: #d83131 !important;
 `;
 
+const MuteButton = styled.img`
+  position: absolute;
+  opacity: 50%;
+  z-index: 1000;
+  width: 25px;
+  height: 25px;
+  opacity: 0;
+  bottom: 5px;
+  right: 5px;
+`;
+
 function Frame({
   start,
   replay,
@@ -202,6 +213,7 @@ function Frame({
   downloadButtonRef,
   mirror,
   mute,
+  delayMute,
 }) {
   const [mode, setMode] = useState(null);
   const [countdown, setCountdown] = useState(0);
@@ -209,6 +221,7 @@ function Frame({
   const infoBoxRef = useRef(null);
   const screen1Ref = useRef(null);
   const screen2Ref = useRef(null);
+  const muteButtonRef = useRef(null);
   const previewScreenRef = useRef(null);
   const replayScreenRef = useRef(null);
   const youtubeRef = useRef(null);
@@ -217,6 +230,7 @@ function Frame({
   const ghostRecorder2 = useRef(null);
   const ghostInterval = useRef(null);
   const ghostStaggerTimeout = useRef(null);
+  const ghostMute = useRef(true);
 
   const replayRecorder1 = useRef(null);
   const replayRecorder2 = useRef(null);
@@ -279,6 +293,7 @@ function Frame({
       previewScreenRef.current.style.zIndex = 3;
       screen1Ref.current.style.opacity = 0;
       screen2Ref.current.style.opacity = 0;
+      muteButtonRef.current.style.opacity = 0;
       previewScreenRef.current.style.border = "dashed 2px #ddd";
     } else {
       previewScreenRef.current.style.zIndex = 0;
@@ -293,6 +308,8 @@ function Frame({
     setReplayReady(false);
     setShowLoading(false);
 
+    screen1Ref.current.muted = true;
+    screen2Ref.current.muted = true;
     if (mode === "STOP" || mode === null) {
       infoBoxRef.current.style.opacity = 1;
       infoBoxRef.current.style.zIndex = 10;
@@ -418,6 +435,8 @@ function Frame({
 
     // Init ghost recorder
     if (mode === "GHOST") {
+      muteButtonRef.current.style.zIndex = 3;
+      muteButtonRef.current.style.opacity = 0.4;
       if (!ghostRecorder1.current) {
         ghostRecorder1.current = new MediaRecorder(
           previewScreenRef.current.captureStream
@@ -437,6 +456,10 @@ function Frame({
           screen2Ref.current.style.zIndex = 1;
           await screen1Ref.current.play();
           setReplayReady(true);
+          if (!ghostMute.current) {
+            screen2Ref.current.muted = true;
+            screen1Ref.current.muted = false;
+          }
         };
         ghostRecorder2.current.ondataavailable = (event) => {
           screen2Ref.current.srcObject = null;
@@ -446,6 +469,10 @@ function Frame({
           screen1Ref.current.style.zIndex = 1;
           screen2Ref.current.play();
           setReplayReady(true);
+          if (!ghostMute.current) {
+            screen1Ref.current.muted = true;
+            screen2Ref.current.muted = false;
+          }
         };
       }
 
@@ -503,6 +530,8 @@ function Frame({
       screen1Ref.current.style.opacity = 0;
       screen2Ref.current.style.zIndex = 0;
       screen1Ref.current.style.zIndex = 0;
+      muteButtonRef.current.style.zIndex = 0;
+      muteButtonRef.current.style.opacity = 0;
     }
   }, [mode]);
 
@@ -599,6 +628,24 @@ function Frame({
         loop
         muted={mute}
       ></Screen>
+      <MuteButton
+        alt={"Mute/Unmute"}
+        ref={muteButtonRef}
+        src={"https://s3.us-east-2.amazonaws.com/tomlum/omt-delay-mute-on.png"}
+        style={{ zIndex: 10000 }}
+        onClick={() => {
+          ghostMute.current = !ghostMute.current;
+          if (!ghostMute.current) {
+            screen1Ref.current.muted = false;
+          } else {
+            screen1Ref.current.muted = true;
+            screen2Ref.current.muted = true;
+          }
+          muteButtonRef.current.src = `https://s3.us-east-2.amazonaws.com/tomlum/omt-delay-mute-${
+            ghostMute.current ? "on" : "off"
+          }.png`;
+        }}
+      ></MuteButton>
     </Container>
   );
 }

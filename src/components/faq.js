@@ -58,20 +58,20 @@ export const Overlay = styled.div`
   span {
     display: flex;
     align-items: center;
+
+    img {
+      width: 30px;
+      height: 30px;
+      padding: 4px;
+      border: solid 1px black;
+      background-color: white;
+      margin-right: 5px;
+    }
   }
 
   button {
     width: 30px;
     height: 30px;
-  }
-
-  img {
-    width: 30px;
-    height: 30px;
-    padding: 4px;
-    border: solid 1px black;
-    background-color: white;
-    margin-right: 5px;
   }
 
   .qa {
@@ -163,6 +163,21 @@ export function FAQ({ setShowFAQ }) {
 
       <div className="qa">
         <div>
+          <b>
+            Why can't I hear my audio playing back? / Why am I getting audio
+            feedback?
+          </b>
+        </div>
+        <div>
+          While using the camera, there should be a little mute/unmute button on
+          the bottom right corner of the video. If you unmute, be sure to be
+          using headphones or a dedicated microphone, or else you may get
+          unwanted audio feedback.
+        </div>
+      </div>
+
+      <div className="qa">
+        <div>
           <b>Why can't I control my replay?</b>
         </div>
         <div>
@@ -198,6 +213,17 @@ export function FAQ({ setShowFAQ }) {
 
       <div className="qa">
         <div>
+          <b>Why doesn't this work on mobile/safari?</b>
+        </div>
+        <div>
+          Sadly, mobile browsers and safari are missing some features that are
+          essential for the delay camera to work (though I'm investigating other
+          solutions to get around this)
+        </div>
+      </div>
+
+      <div className="qa">
+        <div>
           <b>Do you collect my data?</b>
         </div>
         <div>
@@ -206,6 +232,39 @@ export function FAQ({ setShowFAQ }) {
           it to work! If you're curious, this app is open source so you can see
           the code for yourself{" "}
           <a href="https://github.com/tomlum/OneMoreTry">here</a>!
+        </div>
+      </div>
+
+      <div className="qa">
+        <div>
+          <b>Can I donate to support this?</b>
+        </div>
+        <div>
+          I swear a real person actually asked me this. I really had no
+          intention of it but if you feel so inclined you can donate to support
+          this site and others here:
+          <form
+            action="https://www.paypal.com/cgi-bin/webscr"
+            method="post"
+            target="_top"
+          >
+            <input type="hidden" name="cmd" value="_donations" />
+            <input type="hidden" name="business" value="ZMHX8U6A5JARG" />
+            <input
+              type="hidden"
+              name="item_name"
+              value="To continue building and maintaining useful and free software tools!"
+            />
+            <input type="hidden" name="currency_code" value="USD" />
+            <input
+              type="image"
+              src="https://s3.us-east-2.amazonaws.com/tomlum/omt-donate-button.png"
+              border="0"
+              name="submit"
+              title="PayPal - The safer, easier way to pay online!"
+              alt="Donate with PayPal button"
+            />
+          </form>
         </div>
       </div>
     </Overlay>
