@@ -36,6 +36,10 @@ hr {
   color: #888;
 }
 
+button {
+  cursor: pointer;
+}
+
 .center {
   text-align: center;
 }
@@ -47,6 +51,11 @@ hr {
 .flex {
   display: -ms-flexbox;
   display: flex;
+}
+
+.justify-center {
+  -ms-flex-pack: center;
+      justify-content: center;
 }
 
 .justify-end {
@@ -96,4 +105,4 @@ hr {
 }
 
 
-/*# sourceMappingURL=ssr-bundle.089e7.css.map*/
+/*# sourceMappingURL=ssr-bundle.be7cf.css.map*/
