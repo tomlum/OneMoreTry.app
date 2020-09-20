@@ -1,4 +1,8 @@
-# one-more-try
+# [OneMoreTry.app](www.OneMoreTry.app)
+
+OneMoreTry is a tool for practicing anything.  It uses a **Delay Camera** that lets you try something and then see it play back right away.
+
+OneMoreTry was built using Preact, Styled Components, and the MediaRecorder API.
 
 ## CLI Commands
 
